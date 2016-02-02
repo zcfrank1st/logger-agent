@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <layout class="ch.qos.logback.classic.PatternLayout">
+            <Pattern>
+                %yellow(%d) %highlight(%-5level) %cyan(%logger{36}) - %msg%n
+            </Pattern>
+        </layout>
+    </appender>
+
+
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>/Users/zcfrank1st/Desktop/log-agent.log</File>
+        <!--<File>/opt/logs/log-agent/log-agent.log</File>-->
+        <Encoding>UTF-8</Encoding>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <FileNamePattern>/Users/zcfrank1st/Desktop/log-agent.%d{yyyy-MM-dd}.log</FileNamePattern>
+        </rollingPolicy>
+
+        <encoder>
+            <Pattern>%yellow(%d) [%thread] %highlight(%-5level) %cyan(%logger{36}) - %M - %msg%n - %ex</Pattern>
+        </encoder>
+    </appender>
+
+    <root level="debug">
+        <appender-ref ref="STDOUT" />
+        <appender-ref ref="FILE" />
+    </root>
+
+</configuration>
