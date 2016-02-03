@@ -27,32 +27,26 @@ public class LogAgent {
             new AgentBuilder.Default()
                     .with(new AgentBuilder.Listener() {
                         @Override
-                        public void onTransformation(TypeDescription typeDescription, DynamicType dynamicType) {
-                        }
+                        public void onTransformation(TypeDescription typeDescription, DynamicType dynamicType) {}
 
                         @Override
-                        public void onIgnored(TypeDescription typeDescription) {
-                        }
+                        public void onIgnored(TypeDescription typeDescription) {}
 
                         @Override
                         public void onError(String s, Throwable throwable) {
-                            System.out.println("error --- " + s);
-                            System.out.println("error === " + throwable.getMessage());
-                            throwable.printStackTrace();
+                            logger.error("agent builder error, caused by: " + throwable.getMessage());
                         }
 
                         @Override
-                        public void onComplete(String s) {
-                            System.out.println("complete --- " + s);
-                        }
+                        public void onComplete(String s) {}
                     })
                     .type(declaresMethod(isAnnotatedWith(Log.class)))
                     .transform((builder, typeDescription) -> builder
-                            .method(isDeclaredBy(any()))
+                            .method(isAnnotatedWith(Log.class))
                             .intercept(MethodDelegation.to(LogInterceptor.class).andThen(SuperMethodCall.INSTANCE)))
                     .installOn(inst);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("system error: " + e.getMessage());
         }
     }
 }
